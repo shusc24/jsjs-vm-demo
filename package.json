@@ -12,9 +12,17 @@
     "static-server": "^2.2.1",
     "typescript": "^4.6.3"
   },
+  "devDependencies": {
+    "vitepress": "^1.0.0-alpha.65",
+    "markdown-it-plantuml": "^1.4.1",
+    "markdown-it-task-lists":  "^2.1.1"
+  },
   "scripts": {
     "build": "tsc",
     "server": "static-server",
-    "generate": "node dist/index.js"
+    "generate": "node dist/index.js",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:serve": "vitepress serve docs"
   }
 }

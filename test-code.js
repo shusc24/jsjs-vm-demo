@@ -16,14 +16,16 @@
 // };
 // console.log(quickSort([3, 6, 8, 2, 1, 9, 5, 7, 4]));
 
-wx.showModal({
-	title: '这是一段隐藏在图片中的代码',
-	content: '这是一段隐藏在图片中的代码',
-	success: function (res) {
-		if (res.confirm) {
-			page.setData({ motto: '用户点击确定' });
-		} else if (res.cancel) {
-			page.setData({ motto: '用户点击取消' });
-		}
-	}
-})
+var a = {a: [1,[1,2]]}
+
+// wx.showModal({
+// 	title: '这是一段隐藏在图片中的代码',
+// 	content: '这是一段隐藏在图片中的代码',
+// 	success: function (res) {
+// 		if (res.confirm) {
+// 			page.setData({ motto: '用户点击确定' });
+// 		} else if (res.cancel) {
+// 			page.setData({ motto: '用户点击取消' });
+// 		}
+// 	}
+// })

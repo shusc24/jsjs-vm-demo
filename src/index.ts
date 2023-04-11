@@ -16,52 +16,51 @@ async function __main__() {
   const codes = compiler.toNumberArray();
   compiler.show();
 
-  // const globalScope = new GlobalScope(global);
-  // const vm = new VirtualMachine(globalScope, codes);
-  // vm.run()
+  const globalScope = new GlobalScope(global);
+  const vm = new VirtualMachine(globalScope, codes);
+  vm.run()
 
-  const image = await Jimp.read('./origin.jpg');
-  const buffer = image.bitmap.data;
-
-  const highBit = 0xFF;
-  const lowBit = 0xF0;
-
-  for (let i = 0; i < codes.length; i++) {
-    const code = codes[i].toString(2).padStart(8, '0').split('').map(x => x === '1' ? highBit : lowBit);
-    const offset = i * 8 * 4;
-
-    for (let i = 0; i < code.length; i++) {
-      const bit = code[i];
-      const bitIndex = offset + (i * 4) + 3;
-      buffer[bitIndex] = bit;
-    }
-  }
-
-  await image.quality(100).writeAsync('./target.png');
-
-  const targetImage = await Jimp.read('./target.png');
-  const targetBuffer = targetImage.bitmap.data;
-  const targetCodes = [];
-
-  for (let i = 0; i < targetBuffer.length; i += 32) {
-    const offset = i;
-
-    let byte = 0;
-    for (let j = 0; j < 8; j++) {
-      const bitIndex = offset + (j * 4) + 3;
-      const bit = targetBuffer[bitIndex] > 0xf8 ? 1 : 0;
-      byte = byte << 1;
-      byte = byte | bit;
-    }
-    targetCodes.push(byte);
-  }
-  console.log(targetCodes);
-
-  for (let i = 0; i < codes.length; i++) {
-    if (codes[i] !== targetCodes[i]) {
-      debugger;
-    }
-  }
+  // const image = await Jimp.read('./origin.jpg');
+  // const buffer = image.bitmap.data;
+  //
+  // const highBit = 0xFF;
+  // const lowBit = 0xF0;
+  //
+  // for (let i = 0; i < codes.length; i++) {
+  //   const code = codes[i].toString(2).padStart(8, '0').split('').map(x => x === '1' ? highBit : lowBit);
+  //   const offset = i * 8 * 4;
+  //
+  //   for (let i = 0; i < code.length; i++) {
+  //     const bit = code[i];
+  //     const bitIndex = offset + (i * 4) + 3;
+  //     buffer[bitIndex] = bit;
+  //   }
+  // }
+  //
+  // await image.quality(100).writeAsync('./target.png');
+  //
+  // const targetImage = await Jimp.read('./target.png');
+  // const targetBuffer = targetImage.bitmap.data;
+  // const targetCodes = [];
+  //
+  // for (let i = 0; i < targetBuffer.length; i += 32) {
+  //   const offset = i;
+  //
+  //   let byte = 0;
+  //   for (let j = 0; j < 8; j++) {
+  //     const bitIndex = offset + (j * 4) + 3;
+  //     const bit = targetBuffer[bitIndex] > 0xf8 ? 1 : 0;
+  //     byte = byte << 1;
+  //     byte = byte | bit;
+  //   }
+  //   targetCodes.push(byte);
+  // }
+  //
+  // for (let i = 0; i < codes.length; i++) {
+  //   if (codes[i] !== targetCodes[i]) {
+  //     debugger;
+  //   }
+  // }
 
   // for (let i = 0; i < 1e3; i = i + 4) {
   //   console.log([0, 1, 2, 3].map(n => targetBuffer[i + n].toString(16).padStart(2, '0')));

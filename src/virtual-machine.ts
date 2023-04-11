@@ -61,10 +61,20 @@ export class VirtualMachine {
   private pc: number;
 
   constructor(scope: any, codes: number[], pc: number = 0, stack: unknown[] = []) {
+    // assign the scope, codes, pc, and stack to the object
     this.scope = scope;
     this.codes = codes;
     this.pc = pc;
     this.stack = stack;
+  }
+
+  private LogStack(key: string, params?: any){
+    if(!params) {
+      console.log(key + ':', this.stack)
+    } else {
+      // @ts-ignore
+      console.log(key + ':', this.stack, " params:" + JSON.stringify(params, " ", 2));
+    }
   }
 
   private loadAddress() {
@@ -116,10 +126,24 @@ export class VirtualMachine {
 
         case OpCode.NUM: this.loadNumber(); break;
         case OpCode.ADDR: this.loadAddress(); break;
-        case OpCode.STR: this.loadString(); break;
+        case OpCode.STR: {
+          this.loadString();
+          this.LogStack("STR");
+          break;
+        }
 
         case OpCode.POP: this.stack.pop(); break;
-        case OpCode.TOP: this.stack.push(this.stack[this.stack.length - 1]); break;
+        /**
+         * 相当于复制了一份
+         * let stack = [1,2,3,4,5,6,7]
+         * stack.push(stack[stack.length - 1])
+         * stack (8) [1, 2, 3, 4, 5, 6, 7, 7]
+         * */
+        case OpCode.TOP: {
+          this.stack.push(this.stack[this.stack.length - 1]);
+          this.LogStack("top");
+          break;
+        }
         case OpCode.TOP2: this.stack.push(
           this.stack[this.stack.length - 2],
           this.stack[this.stack.length - 1],
@@ -193,7 +217,9 @@ export class VirtualMachine {
           const value = this.stack.pop();
           const key = this.stack.pop() as string;
           const object = this.stack.pop() as any;
+          // this.LogStack("SET:BEFORE", {value, key, object});
           this.stack.push(object[key] = value)
+          // this.LogStack("SET:AFTER");
           break;
         }
         case OpCode.IN: {
